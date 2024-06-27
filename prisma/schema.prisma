@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum FriendStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  acctId    String   @unique @default(uuid())  // Ensure acctId is unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  friends   Friend[] @relation("UserFriends")
+  friendOf  Friend[] @relation("FriendOfUser")
+  followers Follow[] @relation("UserFollowers")
+  following Follow[] @relation("UserFollowing")
+
+  @@map("users")
+}
+
+model Friend {
+  id        Int          @id @default(autoincrement())
+  userId    Int
+  friendId  Int
+  status    FriendStatus
+  createdAt DateTime     @default(now())
+
+  user   User @relation("UserFriends", fields: [userId], references: [id])
+  friend User @relation("FriendOfUser", fields: [friendId], references: [id])
+
+  @@unique([userId, friendId])
+  @@map("friends")
+}
+
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("UserFollowers", fields: [followerId], references: [id])
+  following User @relation("UserFollowing", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
+  @@map("follows")
+}
