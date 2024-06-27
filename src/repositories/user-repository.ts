@@ -6,20 +6,27 @@ export const foundUser = async (email: string) => {
       email: email,
     },
     include: {
-      // tasks: true,
       friends: {
         select: {
-          userId: false,
-          id: false,
           status: true,
-          createdAt: true,
+          friendId: false,
+          friend: {
+            select: {
+              email: true,
+              id: true,
+            },
+          },
         },
       },
       followers: {
         select: {
           followerId: false,
-          id: false,
-          createdAt: true,
+          follower: {
+            select: {
+              email: true,
+              id: true,
+            },
+          },
         },
       },
     },
