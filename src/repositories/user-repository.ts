@@ -20,13 +20,39 @@ export const foundUser = async (email: string) => {
       },
       followers: {
         select: {
-          followerId: false,
+          followerId: true,
+          // followingId: true,
+          // follower: {
+          //   select: {
+          //     email: true,
+          //     id: true,
+          //   },
+          // },
+          following: {
+            select: {
+              email: true,
+              id: true,
+            },
+          },
+        },
+      },
+
+      following: {
+        select: {
+          // followerId: true,
+          followingId: true,
           follower: {
             select: {
               email: true,
               id: true,
             },
           },
+          // following: {
+          //   select: {
+          //     email: true,
+          //     id: true,
+          //   },
+          // },
         },
       },
     },
