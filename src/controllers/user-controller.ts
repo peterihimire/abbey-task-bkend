@@ -2,14 +2,13 @@ import { RequestHandler } from "express";
 import { httpStatusCodes } from "../utils/http-status-codes";
 import BaseError from "../utils/base-error";
 import dotenv from "dotenv";
-dotenv.config();
-
 import {
   foundUser,
   createFollower,
   createFriendship,
 } from "../repositories/user-repository";
-// import { updateProfile } from "../repositories/profile-repository";
+
+dotenv.config();
 
 // @route POST api/auth/send-otp
 // @desc To send SMS OTP to user
@@ -20,6 +19,15 @@ export const getUserInfo: RequestHandler = async (req, res, next) => {
   console.log("Hello user...", user);
 
   try {
+    if (!user) {
+      return next(
+        new BaseError(
+          "User is not authenticated.",
+          httpStatusCodes.UNAUTHORIZED
+        )
+      );
+    }
+
     const found_user = await foundUser(user?.email!);
     console.log("This is found user....", found_user);
 
@@ -55,6 +63,15 @@ export const addFriend: RequestHandler = async (req, res, next) => {
   console.log("Hello user...", user);
 
   try {
+    if (!user) {
+      return next(
+        new BaseError(
+          "User is not authenticated.",
+          httpStatusCodes.UNAUTHORIZED
+        )
+      );
+    }
+
     const found_user = await foundUser(user?.email!);
     console.log("This is found user....", found_user);
 
@@ -73,7 +90,6 @@ export const addFriend: RequestHandler = async (req, res, next) => {
     console.log("This is user payload...", payload);
 
     const added_friend = await createFriendship(payload);
-    // const { id, password, createdAt, updatedAt, ...others } = found_user;
 
     res.status(httpStatusCodes.OK).json({
       status: "success",
@@ -88,7 +104,6 @@ export const addFriend: RequestHandler = async (req, res, next) => {
   }
 };
 
-
 // @route POST api/auth/send-otp
 // @desc To send SMS OTP to user
 // @access Public
@@ -99,6 +114,21 @@ export const addFollower: RequestHandler = async (req, res, next) => {
   console.log("Hello user...", user);
 
   try {
+    if (!user) {
+      return next(
+        new BaseError(
+          "User is not authenticated.",
+          httpStatusCodes.UNAUTHORIZED
+        )
+      );
+    }
+
+    if (!friendId) {
+      return next(
+        new BaseError("Follower ID is required.", httpStatusCodes.BAD_REQUEST)
+      );
+    }
+
     const found_user = await foundUser(user?.email!);
     console.log("This is found user....", found_user);
 
@@ -117,7 +147,6 @@ export const addFollower: RequestHandler = async (req, res, next) => {
     console.log("This is user payload...", payload);
 
     const added_follower = await createFollower(payload);
-    // const { id, password, createdAt, updatedAt, ...others } = found_user;
 
     res.status(httpStatusCodes.OK).json({
       status: "success",

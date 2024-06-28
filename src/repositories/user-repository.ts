@@ -18,6 +18,20 @@ export const foundUser = async (email: string) => {
           },
         },
       },
+
+      friendOf: {
+        select: {
+          status: true,
+          userId: true,
+          friend: {
+            select: {
+              email: true,
+              id: true,
+            },
+          },
+        },
+      },
+
       followers: {
         select: {
           followerId: true,
@@ -83,9 +97,14 @@ export const existingAcctId = async (acct_id: string) => {
   });
 };
 
-export const createUser = async (data: { email: string; password: string }) => {
+export const createUser = async (data: {
+  fullname: string;
+  email: string;
+  password: string;
+}) => {
   return prisma.user.create({
     data: {
+      fullname: data.fullname,
       email: data.email,
       password: data.password,
     },
@@ -100,7 +119,6 @@ export const createFriendship = async (data: {
     data: {
       userId: data.userId,
       friendId: data.friendId,
-      status: "PENDING",
     },
   });
 };

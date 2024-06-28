@@ -9,12 +9,11 @@ import express, {
 
 import BaseError from "../utils/base-error";
 import { httpStatusCodes } from "../utils/http-status-codes";
-// import { foundAdmin, createAdmin } from "../repositories/admin-auth-repository";
 
 // VALIDATE USER SESSION
 export const verifySession: RequestHandler = (req, res, next) => {
   const { user } = req.session;
-  // const { user } = req.session as { user: any };
+
   console.log("This is the session user...", user);
 
   if (!user) {
@@ -26,7 +25,6 @@ export const verifySession: RequestHandler = (req, res, next) => {
     );
   }
   req.user = user;
-  // (req as any).user = user;
   next();
 };
 

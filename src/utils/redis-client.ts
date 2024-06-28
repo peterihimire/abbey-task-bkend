@@ -18,7 +18,7 @@ const redisclient = createClient({
 })();
 
 redisclient.on("ready", () => {
-  console.log("Redis database is ready!");
+  // console.log("Redis database is ready!");
 });
 
 redisclient.on("connect", function () {

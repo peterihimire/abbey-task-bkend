@@ -1,25 +1,17 @@
 import { RequestHandler } from "express";
 import { httpStatusCodes } from "../utils/http-status-codes";
 import BaseError from "../utils/base-error";
-// import db from "../database/models";
 import bcrypt from "bcrypt";
-// import crypto from "crypto";
-// import { sign, verify } from "jsonwebtoken";
 import dotenv from "dotenv";
+import { foundUser, createUser } from "../repositories/user-repository";
+
 dotenv.config();
-// const User = db.User;
-// const smsKey: string = process.env.SMS_KEY!;
-import {
-  foundUser,
-  existingAcctId,
-  createUser,
-} from "../repositories/user-repository";
 
 // @route POST api/auth/login
 // @desc Login into account
 // @access Private
 export const register: RequestHandler = async (req, res, next) => {
-  const { email } = req.body;
+  const { fullname, email } = req.body;
   const original_password = req.body.password;
 
   try {
@@ -39,6 +31,7 @@ export const register: RequestHandler = async (req, res, next) => {
     const hashed_password = await bcrypt.hash(original_password, salt);
 
     const payload = {
+      fullname: fullname,
       email: email,
       password: hashed_password,
     };
@@ -113,7 +106,17 @@ export const login: RequestHandler = async (req, res, next) => {
       if (err) return next(err);
     });
 
-    const { id, password, ...others } = found_user;
+    const {
+      id,
+      acctId,
+      password,
+      friends,
+      friendOf,
+      followers,
+      following,
+      fullname,
+      ...others
+    } = found_user;
 
     res.status(httpStatusCodes.OK).json({
       status: "success",

@@ -23,6 +23,7 @@ enum FriendStatus {
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
+  fullname  String
   password  String
   acctId    String   @unique @default(uuid())  // Ensure acctId is unique
   createdAt DateTime @default(now())
@@ -40,7 +41,7 @@ model Friend {
   id        Int          @id @default(autoincrement())
   userId    Int
   friendId  Int
-  status    FriendStatus
+  status    FriendStatus @default(PENDING)
   createdAt DateTime     @default(now())
 
   user   User @relation("UserFriends", fields: [userId], references: [id])

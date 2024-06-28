@@ -2,7 +2,6 @@ import express, { Application, Request } from "express";
 import session, { SessionOptions } from "express-session";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import path from "path";
 import { CustomUser } from "./types/types";
 import { redisclient } from "./utils/redis-client";
 
@@ -25,12 +24,7 @@ type CustomSessionOptions = SessionOptions & {
 
 declare module "express-session" {
   interface SessionData {
-    //For CustomUser and Admin I used the imported types
-    // passport: PassportUser;
     user: CustomUser;
-    // admin: Admin;
-    // cart: Cart;
-    // client: Client;
   }
 }
 
@@ -57,7 +51,6 @@ let redisStore = new (RedisStore as any)({
 });
 
 const sessionOptions: CustomSessionOptions = {
-  // store: new RedisStore({ client: redisClient }),
   store: redisStore,
   secret: String(process.env.SESSION_SECRET),
   resave: false,
