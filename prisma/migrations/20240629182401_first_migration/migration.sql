@@ -2,11 +2,24 @@
 CREATE TYPE "FriendStatus" AS ENUM ('PENDING', 'ACCEPTED', 'REJECTED');
 
 -- CreateTable
+CREATE TABLE "users" (
+    "id" SERIAL NOT NULL,
+    "email" TEXT NOT NULL,
+    "fullname" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "acctId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "friends" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "friendId" INTEGER NOT NULL,
-    "status" "FriendStatus" NOT NULL,
+    "status" "FriendStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "friends_pkey" PRIMARY KEY ("id")
@@ -21,6 +34,12 @@ CREATE TABLE "follows" (
 
     CONSTRAINT "follows_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_acctId_key" ON "users"("acctId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "friends_userId_friendId_key" ON "friends"("userId", "friendId");
