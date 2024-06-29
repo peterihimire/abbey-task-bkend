@@ -11,12 +11,10 @@ import {
 dotenv.config();
 
 // @route POST api/auth/send-otp
-// @desc To send SMS OTP to user
+// @desc To get user details
 // @access Public
 export const getUserInfo: RequestHandler = async (req, res, next) => {
   const { user } = req.session;
-
-  console.log("Hello user...", user);
 
   try {
     if (!user) {
@@ -29,7 +27,6 @@ export const getUserInfo: RequestHandler = async (req, res, next) => {
     }
 
     const found_user = await foundUser(user?.email!);
-    console.log("This is found user....", found_user);
 
     if (!found_user) {
       return next(
@@ -37,7 +34,6 @@ export const getUserInfo: RequestHandler = async (req, res, next) => {
       );
     }
 
-    console.log("THIS is found user...", found_user);
     const { id, password, createdAt, updatedAt, ...others } = found_user;
 
     res.status(httpStatusCodes.OK).json({
@@ -54,7 +50,7 @@ export const getUserInfo: RequestHandler = async (req, res, next) => {
 };
 
 // @route POST api/auth/send-otp
-// @desc To send SMS OTP to user
+// @desc To add a friend
 // @access Public
 export const addFriend: RequestHandler = async (req, res, next) => {
   const { user } = req.session;
@@ -81,13 +77,10 @@ export const addFriend: RequestHandler = async (req, res, next) => {
       );
     }
 
-    console.log("THIS is found user...", found_user);
-
     const payload = {
       userId: Number(user?.id),
       friendId: friendId,
     };
-    console.log("This is user payload...", payload);
 
     const added_friend = await createFriendship(payload);
 
@@ -105,7 +98,7 @@ export const addFriend: RequestHandler = async (req, res, next) => {
 };
 
 // @route POST api/auth/send-otp
-// @desc To send SMS OTP to user
+// @desc To add a follower
 // @access Public
 export const addFollower: RequestHandler = async (req, res, next) => {
   const { user } = req.session;
@@ -130,7 +123,6 @@ export const addFollower: RequestHandler = async (req, res, next) => {
     }
 
     const found_user = await foundUser(user?.email!);
-    console.log("This is found user....", found_user);
 
     if (!found_user) {
       return next(
@@ -138,13 +130,10 @@ export const addFollower: RequestHandler = async (req, res, next) => {
       );
     }
 
-    console.log("THIS is found user...", found_user);
-
     const payload = {
       userId: Number(user?.id),
       friendId: friendId,
     };
-    console.log("This is user payload...", payload);
 
     const added_follower = await createFollower(payload);
 

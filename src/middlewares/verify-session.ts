@@ -1,11 +1,4 @@
-import fs from "fs";
-import express, {
-  Request,
-  Response,
-  NextFunction,
-  RequestHandler,
-  ErrorRequestHandler,
-} from "express";
+import { RequestHandler } from "express";
 
 import BaseError from "../utils/base-error";
 import { httpStatusCodes } from "../utils/http-status-codes";
@@ -13,8 +6,6 @@ import { httpStatusCodes } from "../utils/http-status-codes";
 // VALIDATE USER SESSION
 export const verifySession: RequestHandler = (req, res, next) => {
   const { user } = req.session;
-
-  console.log("This is the session user...", user);
 
   if (!user) {
     return next(
@@ -36,8 +27,6 @@ export const verifySessionAndAuthorization: RequestHandler = (
 ) => {
   verifySession(req, res, async () => {
     const user = req.user;
-    console.log("This is user...from session...", user);
-    const user_id = req.body?.id || req.params?.id;
 
     if (!user?.email) {
       return next(
@@ -48,16 +37,6 @@ export const verifySessionAndAuthorization: RequestHandler = (
       );
     }
 
-    if (user?.id === user_id || user?.id) {
-      next();
-      return;
-    }
-
-    return next(
-      new BaseError(
-        "Requires User Authorization!",
-        httpStatusCodes.UNAUTHORIZED
-      )
-    );
+    next();
   });
 };

@@ -9,5 +9,3 @@ export const httpStatusCodes = {
   UNPROCESSABLE_ENTITY: 422,
   INTERNAL_SERVER: 500,
 };
-
-// module.exports = httpStatusCodes;

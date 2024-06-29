@@ -16,7 +16,6 @@ export const register: RequestHandler = async (req, res, next) => {
 
   try {
     const found_user = await foundUser(email);
-    // console.log("This is found user....", found_user);
 
     if (found_user) {
       return next(
@@ -35,10 +34,8 @@ export const register: RequestHandler = async (req, res, next) => {
       email: email,
       password: hashed_password,
     };
-    console.log("This is user payload...", payload);
 
     const created_user = await createUser(payload);
-    console.log("Created user yes...", created_user);
     const { id, password, ...others } = created_user;
 
     res.status(httpStatusCodes.OK).json({
@@ -63,7 +60,6 @@ export const login: RequestHandler = async (req, res, next) => {
 
   try {
     const found_user = await foundUser(email);
-    // console.log("This is found user....", found_user);
 
     if (!found_user) {
       return next(
@@ -90,7 +86,6 @@ export const login: RequestHandler = async (req, res, next) => {
 
     // Session
     const { createdAt, updatedAt, ...session_data } = found_user;
-    console.log("This is the session data going to the session", session_data);
 
     const new_session = {
       id: session_data.id.toString(),
@@ -98,10 +93,8 @@ export const login: RequestHandler = async (req, res, next) => {
       email: session_data.email,
       password: session_data.password,
     };
-    console.log("This is the new session...", new_session);
 
     req.session.user = new_session;
-
     req.session.save(function (err) {
       if (err) return next(err);
     });

@@ -29,7 +29,7 @@ declare module "express-session" {
 }
 
 const corsOptions = {
-  origin: ["https://localhost:3000", "http://localhost:3000"],
+  origin: ["http://localhost:3000", "http://localhost:3000"],
   methods: ["GET", "PUT", "PATCH", "POST", "OPTIONS", "DELETE", "HEAD"],
   allowedHeaders: [
     "Content-Type",
@@ -60,7 +60,7 @@ const sessionOptions: CustomSessionOptions = {
     secure: false,
     httpOnly: true, // if true prevent client side JS from reading the cookie
     maxAge: 1000 * 60 * 60 * 12, // session max age in miliseconds
-    sameSite: "none",
+    sameSite: "lax", //lax = server:localhost + client: localhost, none = server:https + client: localhost
   },
 };
 

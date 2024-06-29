@@ -12,6 +12,7 @@ export const foundUser = async (email: string) => {
           friendId: false,
           friend: {
             select: {
+              fullname: true,
               email: true,
               id: true,
             },
@@ -25,6 +26,7 @@ export const foundUser = async (email: string) => {
           userId: true,
           friend: {
             select: {
+              fullname: true,
               email: true,
               id: true,
             },
@@ -44,6 +46,7 @@ export const foundUser = async (email: string) => {
           // },
           following: {
             select: {
+              fullname: true,
               email: true,
               id: true,
             },
@@ -57,6 +60,7 @@ export const foundUser = async (email: string) => {
           followingId: true,
           follower: {
             select: {
+              fullname: true,
               email: true,
               id: true,
             },
