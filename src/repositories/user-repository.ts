@@ -24,7 +24,7 @@ export const foundUser = async (email: string) => {
         select: {
           status: true,
           userId: true,
-          friend: {
+          user: {
             select: {
               fullname: true,
               email: true,
