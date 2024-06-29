@@ -10,7 +10,7 @@ import {
 
 dotenv.config();
 
-// @route POST api/auth/send-otp
+// @route POST api/users/acct_info
 // @desc To get user details
 // @access Public
 export const getUserInfo: RequestHandler = async (req, res, next) => {
@@ -49,9 +49,9 @@ export const getUserInfo: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @route POST api/auth/send-otp
+// @route POST api/users/add_friend
 // @desc To add a friend
-// @access Public
+// @access Private
 export const addFriend: RequestHandler = async (req, res, next) => {
   const { user } = req.session;
   const { friendId } = req.body;
@@ -97,9 +97,9 @@ export const addFriend: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @route POST api/auth/send-otp
+// @route POST api/users/add_follower
 // @desc To add a follower
-// @access Public
+// @access Private
 export const addFollower: RequestHandler = async (req, res, next) => {
   const { user } = req.session;
   const { friendId } = req.body;

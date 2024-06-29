@@ -7,9 +7,9 @@ import { foundUser, createUser } from "../repositories/user-repository";
 
 dotenv.config();
 
-// @route POST api/auth/login
-// @desc Login into account
-// @access Private
+// @route POST api/auth/register
+// @desc Regiser into account
+// @access Public
 export const register: RequestHandler = async (req, res, next) => {
   const { fullname, email } = req.body;
   const original_password = req.body.password;
@@ -53,7 +53,7 @@ export const register: RequestHandler = async (req, res, next) => {
 
 // @route POST api/auth/login
 // @desc Login into account
-// @access Private
+// @access Public
 export const login: RequestHandler = async (req, res, next) => {
   const { email } = req.body;
   const original_password = req.body.password;
@@ -124,15 +124,15 @@ export const login: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @route POST api/auth/login
-// @desc Login into account
+// @route POST api/auth/logout
+// @desc Logout into account
 // @access Private
 export const logout: RequestHandler = (req, res, next) => {
   req.session.destroy((err) => {
     if (err) {
       return next(new BaseError("Logout error!", httpStatusCodes.UNAUTHORIZED));
     }
-    console.log("Logout successful!");
+
     res.status(200).json({
       status: "success",
       msg: "Logout successful!",
